@@ -4,7 +4,7 @@ import { searchForWorkspaceRoot } from 'vite';
 
 /** @type {import('vite').UserConfig} */
 const config = {
-	plugins: [sveltekit(), markdown({ mode: ['html', 'toc'] })],
+	plugins: [sveltekit(), markdown({ mode: /** @type {any} */ (['html', 'toc']) })],
 	optimizeDeps: {
 		include: ['highlight.js', 'highlight.js/lib/core']
 	},

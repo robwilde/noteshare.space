@@ -38,7 +38,7 @@ const testCases = [
 
 describe.each(testCases)('Rendering callouts', async (testCase) => {
 	it('Renders callout title correctly ', async () => {
-		render(MarkdownRenderer, { plaintext: testCase.markdown });
+		render(MarkdownRenderer, { props: { plaintext: testCase.markdown, fileTitle: undefined } });
 		const titleEl = await screen.findByText(testCase.title);
 		expect(titleEl).toBeInTheDocument();
 		expect(titleEl).toHaveClass('callout-title');
@@ -46,7 +46,7 @@ describe.each(testCases)('Rendering callouts', async (testCase) => {
 
 	// TODO: this test is broken. Need to fix it.
 	it.skip('Renders callout content correctly ', async () => {
-		render(MarkdownRenderer, { plaintext: testCase.markdown });
+		render(MarkdownRenderer, { props: { plaintext: testCase.markdown, fileTitle: undefined } });
 		const contentEl = await screen.findByText(testCase.content);
 		// const contentEl = await screen.findByText(testCase.content);
 		expect(contentEl).toBeInTheDocument();
