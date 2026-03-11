@@ -17,6 +17,7 @@ RUN npm prune --production
 FROM node:24-alpine
 
 RUN apk add --no-cache openssl
+RUN npm install -g prisma@5
 
 WORKDIR /app
 COPY --from=0 /app .
