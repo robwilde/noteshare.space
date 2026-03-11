@@ -1,10 +1,5 @@
-import { expect, describe, it, vi } from 'vitest';
-import { webcrypto } from 'crypto';
+import { expect, describe, it } from 'vitest';
 import { decrypt_v1, decrypt_v2 } from './decrypt';
-
-vi.stubGlobal('crypto', {
-	subtle: webcrypto.subtle
-});
 
 const TEST_NOTE_V1 = {
 	ciphertext: 'U2FsdGVkX1+r+nJffb6piMq1hPFSBSkf9/sgXj/UalA=',
