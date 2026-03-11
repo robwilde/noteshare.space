@@ -4,7 +4,7 @@
 	class="px-3 py-6 md:p-8 text-center flex flex-wrap justify-center items-center gap-x-2 gap-y-1.5 text-zinc-500 dark:text-zinc-400"
 >
 	<span>
-		Built with love by <a class="underline" href="https://mcndt.dev" alt="blog">mcndt</a>
+		Built with love by <a class="underline" href="https://mcndt.dev">mcndt</a>
 	</span>
 	<span>-</span>
 	<a class="underline" href="/about">About</a>

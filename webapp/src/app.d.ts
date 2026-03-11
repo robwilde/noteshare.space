@@ -1,10 +1,8 @@
 /// <reference types="@sveltejs/kit" />
 
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
-declare namespace App {
-	// interface Locals {}
-	// interface Platform {}
-	// interface Session {}
-	// interface Stuff {}
+declare namespace App {}
+
+declare module 'svelte-icons/*' {
+	import type { SvelteComponent } from 'svelte';
+	export default class extends SvelteComponent {}
 }
