@@ -10,7 +10,7 @@ import { deleteExpiredNotes, deleteInterval } from "./tasks/deleteExpiredNotes";
 export const app: Express = express();
 
 // Enable JSON body parsing
-app.use(express.json({}));
+app.use(express.json({ limit: "500k" }));
 
 // configure logging
 app.use(

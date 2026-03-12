@@ -38,10 +38,10 @@ services:
       - CLEANUP_INTERVAL_SECONDS=600
       - NODE_ENV=production
       # Rate limit for uploading notes
-      - POST_LIMIT_WINDOW_SECONDS=86400
+      - POST_LIMIT_WINDOW=86400
       - POST_LIMIT=50
       # Rate limit for downloading notes
-      - GET_LIMIT_WINDOW_SECONDS=60
+      - GET_LIMIT_WINDOW=60
       - GET_LIMIT=20
     depends_on:
       migrate:

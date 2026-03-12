@@ -25,4 +25,4 @@ COPY --from=0 /app .
 ENV PORT 8080
 EXPOSE 8080
 
-CMD ["sh", "-c", "prisma migrate deploy --schema ./prisma/schema.prisma && node ./build/src/server.js"]
+CMD ["sh", "-c", "prisma migrate deploy --schema ./prisma/schema.prisma && set -a && [ -f .env ] && . ./.env && set +a && exec node ./build/src/server.js"]
