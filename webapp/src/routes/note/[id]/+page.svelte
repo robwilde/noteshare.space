@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { decrypt } from '$lib/crypto/decrypt';
 	import MarkdownRenderer from '$lib/components/MarkdownRenderer.svelte';
 	import LogoMarkdown from 'svelte-icons/io/IoLogoMarkdown.svelte';
 	import IconEncrypted from 'svelte-icons/md/MdLockOutline.svelte';
@@ -49,9 +48,10 @@
 		}
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		if (browser && note) {
 			const key = location.hash.slice(1);
+			const { decrypt } = await import('$lib/crypto/decrypt');
 			decrypt({ ...note, key }, note.crypto_version)
 				.then((value) => {
 					const { body, title } = parsePayload(value);
