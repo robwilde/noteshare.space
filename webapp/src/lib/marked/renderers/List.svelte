@@ -1,11 +1,12 @@
 <script lang="ts">
-	export let ordered: boolean;
-	export let start: number;
+	import type { Snippet } from 'svelte';
+
+	let { ordered, start, children }: { ordered: boolean; start: number; children?: Snippet } =
+		$props();
 </script>
 
-<!-- Styling is taken care of by Tailwind Typography plugin -->
 {#if ordered}
-	<ol {start}><slot /></ol>
+	<ol {start}>{@render children?.()}</ol>
 {:else}
-	<ul><slot /></ul>
+	<ul>{@render children?.()}</ul>
 {/if}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Katex from '$lib/components/Math.svelte';
 
-	export let text: string;
+	let { text }: { text: string } = $props();
 </script>
 
 <Katex math={text} displayMode />

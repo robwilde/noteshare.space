@@ -1,23 +1,19 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import LinkIcon from 'svelte-icons/md/MdOpenInNew.svelte';
 	import InternalLink from './InternalLink.svelte';
 
-	export let href = '';
-	export let title: string;
-	let isWebLink = true;
+	let { href = '', title, children }: { href?: string; title: string; children?: Snippet } =
+		$props();
 
-	$: if (href) {
-		if (!href.match(/^http[s]?:\/\//)) {
-			isWebLink = false;
-		}
-	}
+	let isWebLink = $derived(!href || !!href.match(/^https?:\/\//));
 </script>
 
 {#if isWebLink}
 	<span class="underline cursor-not-allowed inline-flex items-center font-normal">
-		<a {href} {title} class="external-link text-[#705dcf]"><slot /></a>
+		<a {href} {title} class="external-link text-[#705dcf]">{@render children?.()}</a>
 		<span class="h-3 w-3 inline-block mb-2 text-zinc-400 ml-0.5"><LinkIcon /></span>
 	</span>
 {:else}
-	<InternalLink useSlot><slot /></InternalLink>
+	<InternalLink useSlot>{@render children?.()}</InternalLink>
 {/if}
