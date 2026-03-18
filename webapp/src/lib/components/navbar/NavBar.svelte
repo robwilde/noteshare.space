@@ -1,72 +1,78 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { slide } from 'svelte/transition';
-	import FaBars from 'svelte-icons/fa/FaBars.svelte';
+    import type {Snippet} from 'svelte';
+    import {onMount} from 'svelte';
+    import {slide} from 'svelte/transition';
+    import FaBars from 'svelte-icons/fa/FaBars.svelte';
 
-	export let showMobileMenu = false;
+    let {left, right}: { left?: Snippet; right?: Snippet } = $props();
 
-	const mediaQueryHandler = (e: MediaQueryListEvent) => {
-		if (!e.matches) {
-			showMobileMenu = false;
-		}
-	};
+    let showMobileMenu = $state(false);
 
-	onMount(() => {
-		const mediaListener = window.matchMedia('(max-width: 767px)');
-		mediaListener.addEventListener('change', mediaQueryHandler);
-		return () => mediaListener.removeEventListener('change', mediaQueryHandler);
-	});
+    const mediaQueryHandler = (e: MediaQueryListEvent) => {
+        if (!e.matches) {
+            showMobileMenu = false;
+        }
+    };
+
+    onMount(() => {
+        const mediaListener = window.matchMedia('(max-width: 767px)');
+        mediaListener.addEventListener('change', mediaQueryHandler);
+        return () => mediaListener.removeEventListener('change', mediaQueryHandler);
+    });
 </script>
 
 <div
-	id="navbar"
-	class="h-[65px] md:h-14 border-b border-zinc-200 dark:border-zinc-700 transition-colors"
+        id="navbar"
+        class="h-[65px] md:h-14 border-b border-zinc-200 dark:border-zinc-700 transition-colors"
 >
-	<div
-		id="navbar-content"
-		class="h-full px-4 6xl:px-0 max-w-6xl mx-auto flex items-center justify-between content-center whitespace-nowrap"
-	>
-		<div id="navbar-left" class="flex gap-4">
-			<a href="/" class="self-center h-full pb-0.5">
+    <div
+            id="navbar-content"
+            class="h-full px-4 6xl:px-0 max-w-6xl mx-auto flex items-center justify-between content-center whitespace-nowrap"
+    >
+        <div id="navbar-left" class="flex gap-4">
+            <a href="/" class="self-center h-full pb-0.5">
 				<span id="name" class="self-center font-bold text-xl md:text-lg dark:text-white"
-					>📝 {import.meta.env.VITE_BRANDING}</span
-				>
-			</a>
-			<ul class="hidden md:flex gap-4 content-center">
-				<slot name="left" />
-			</ul>
-		</div>
-		<div id="navbar-right" class="hidden md:block flex gap-8 flex">
-			<ul class="flex gap-4 content-center">
-				<slot name="right" />
-			</ul>
-		</div>
-		<div class="md:hidden ml-6 cursor-pointer text-text-muted hover:text-text-normal w-6">
-			<button
-				aria-label="navigation menu"
-				on:click={() => (showMobileMenu = !showMobileMenu)}
-				class="flex flex-col justify-center text-zinc-500 dark:text-zinc-400"><FaBars /></button
-			>
-		</div>
-	</div>
+                >📝 {import.meta.env.VITE_BRANDING}</span
+                >
+            </a>
+            <ul class="hidden md:flex gap-4 content-center">
+                {@render left?.()}
+            </ul>
+        </div>
+        <div id="navbar-right" class="hidden md:block gap-8">
+            <ul class="flex gap-4 content-center">
+                {@render right?.()}
+            </ul>
+        </div>
+        <div class="md:hidden ml-6 cursor-pointer text-text-muted hover:text-text-normal w-6">
+            <button
+                    aria-label="navigation menu"
+                    onclick={() => (showMobileMenu = !showMobileMenu)}
+                    class="flex flex-col justify-center text-zinc-500 dark:text-zinc-400">
+                <FaBars/>
+            </button
+            >
+        </div>
+    </div>
 </div>
 
 {#if showMobileMenu}
-	<div
-		transition:slide
-		class="fixed top-[65px] w-full sm:w-72 sm:right-1
+    <div
+            transition:slide
+            class="fixed top-[65px] w-full sm:w-72 sm:right-1
 		rounded-lg"
-	>
-		<div
-			class="bg-zinc-200 dark:bg-zinc-700 relative mt-2 mx-2 px-4 py-2 rounded-[20px] shadow-md sm:shadow-lg"
-		>
-			<div
-				on:click={() => (showMobileMenu = !showMobileMenu)}
-				class="flex flex-col gap-0 text-xl dark:text-zinc-200"
-			>
-				<slot name="left" />
-				<slot name="right" />
-			</div>
-		</div>
-	</div>
+    >
+        <div
+                class="bg-zinc-200 dark:bg-zinc-700 relative mt-2 mx-2 px-4 py-2 rounded-[20px] shadow-md sm:shadow-lg"
+        >
+            <button
+                    type="button"
+                    onclick={() => (showMobileMenu = !showMobileMenu)}
+                    class="flex flex-col gap-0 text-xl dark:text-zinc-200 w-full text-left bg-transparent border-none p-0 cursor-default"
+            >
+                {@render left?.()}
+                {@render right?.()}
+            </button>
+        </div>
+    </div>
 {/if}
