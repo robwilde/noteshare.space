@@ -13,6 +13,9 @@ const config = {
 		environment: 'happy-dom',
 		setupFiles: ['setupTest.js']
 	},
+	resolve: {
+		...(process.env.VITEST ? { conditions: ['browser'] } : {})
+	},
 	server: {
 		fs: {
 			// Allow serving CHANGELOG.md file
