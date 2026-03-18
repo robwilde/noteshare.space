@@ -62,7 +62,7 @@
 		}
 	});
 
-	$: if (note?.insert_time) {
+	if (note?.insert_time) {
 		const diff_ms = new Date().valueOf() - new Date(note.insert_time).valueOf();
 		timeString = msToString(diff_ms);
 	}
@@ -76,7 +76,7 @@
 </svelte:head>
 
 {#if plaintext}
-	<div class="max-w-2xl mx-auto">
+	<div class="max-w-[50rem] mx-auto">
 		<Dismissable />
 
 		<p
@@ -108,7 +108,7 @@
 {/if}
 
 {#if decryptFailed}
-	<div class="prose max-w-2xl prose-zinc dark:prose-invert">
+	<div class="prose max-w-[50rem] prose-zinc dark:prose-invert">
 		<h1>Error: Cannot decrypt file 🔒</h1>
 		<p class="prose-xl">This note could not be decrypted with this link.</p>
 		<p class="prose-xl">
