@@ -1,38 +1,54 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { getCalloutColor, getCalloutIcon } from '$lib/util/callout';
 	import CalloutIcon from '$lib/components/CalloutIcon.svelte';
 
-	export let title = '';
-	export let type = 'note';
-	let color = '--callout-warning';
-	let icon = 'note';
-	let init = false;
+	let {
+		title: propTitle = '',
+		type: propType = 'note',
+		children
+	}: { title?: string; type?: string; children?: Snippet } = $props();
 
-	let content: HTMLElement;
+	let title = $state('');
+	let type = $state('note');
+	let color = $state('--callout-warning');
+	let icon = $state('note');
+	let content = $state<HTMLElement>();
 
-	$: if (content) {
-		const titleElement = content.getElementsByTagName('p')[0];
-		const preFilled = title != '';
-		const match = titleElement.innerText.split('\n')[0].match(/\[!(.+)\]([+-]?)(?:\s(.+))?/);
-		if (match && !preFilled) {
-			type = match[1]?.trim();
-			title = match[3]?.trim() ?? type[0].toUpperCase() + type.substring(1).toLowerCase();
-		}
+	$effect(() => {
+		if (content) {
+			const titleElement = content.getElementsByTagName('p')[0];
+			if (!titleElement) return;
+			const preFilled = propTitle != '';
 
-		color = `--${getCalloutColor(type)}`;
-		icon = getCalloutIcon(type);
-
-		// Remove title from content
-		if (!preFilled) {
-			const pos = titleElement.innerHTML.indexOf('<br>');
-			if (pos >= 0) {
-				titleElement.innerHTML = titleElement.innerHTML.substring(pos + 4);
+			if (preFilled) {
+				title = propTitle;
+				type = propType;
 			} else {
-				titleElement.innerHTML = '';
+				const firstLineHtml = titleElement.innerHTML.split(/<br\s*\/?>/)[0];
+				const temp = document.createElement('span');
+				temp.innerHTML = firstLineHtml;
+				const firstLineText = temp.textContent || '';
+				const match = firstLineText.match(/\[!(.+)]([+-]?)(?:\s(.+))?/);
+				if (match) {
+					type = match[1]?.trim();
+					title = match[3]?.trim() ?? type[0].toUpperCase() + type.substring(1).toLowerCase();
+				}
 			}
-		}
-		init = true;
-	}
+
+			color = `--${getCalloutColor(type)}`;
+			icon = getCalloutIcon(type);
+
+			if (!preFilled) {
+				const pos = titleElement.innerHTML.indexOf('<br>');
+				if (pos >= 0) {
+					titleElement.innerHTML = titleElement.innerHTML.substring(pos + 4);
+				} else {
+					titleElement.innerHTML = '';
+				}
+			}
+}
+	});
 </script>
 
 <div
@@ -46,6 +62,6 @@
 		<span class="callout-title font-bold text-md">{title}</span>
 	</div>
 	<div bind:this={content} class="callout-content prose-p:my-0 prose-p:mx-0 py-4 px-3">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>

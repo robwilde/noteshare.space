@@ -9,14 +9,13 @@
 	import Dismissable from '$lib/components/Dismissable.svelte';
 	import type { PageData } from './$types';
 
-	export let data: PageData;
-	let { note } = data;
+	let { data }: { data: PageData } = $props();
+	let note = $derived(data.note);
 
-	let plaintext: string;
-	let timeString: string;
-	let decryptFailed = false;
-	let showRaw = false;
-	let fileTitle: string | undefined;
+	let plaintext = $state<string | undefined>(undefined);
+	let decryptFailed = $state(false);
+	let showRaw = $state(false);
+	let fileTitle = $state<string | undefined>(undefined);
 
 	function toggleRaw() {
 		showRaw = !showRaw;
@@ -62,10 +61,11 @@
 		}
 	});
 
-	if (note?.insert_time) {
-		const diff_ms = new Date().valueOf() - new Date(note.insert_time).valueOf();
-		timeString = msToString(diff_ms);
-	}
+	let timeString = $derived(
+		note?.insert_time
+			? msToString(new Date().valueOf() - new Date(note.insert_time).valueOf())
+			: ''
+	);
 </script>
 
 <svelte:head>
@@ -76,7 +76,7 @@
 </svelte:head>
 
 {#if plaintext}
-	<div class="max-w-[50rem] mx-auto">
+	<div class="mx-auto">
 		<Dismissable />
 
 		<p
@@ -87,7 +87,7 @@
 				<span>e2e encrypted | <span>Shared {timeString} ago</span></span>
 			</span>
 			<button
-				on:click={toggleRaw}
+				onclick={toggleRaw}
 				class="flex flex-row-reverse justify-end md:flex-row underline md:no-underline gap-1.5 uppercase items-center hover:underline"
 			>
 				{#if showRaw}
@@ -108,7 +108,7 @@
 {/if}
 
 {#if decryptFailed}
-	<div class="prose max-w-[50rem] prose-zinc dark:prose-invert">
+	<div class="prose prose-zinc dark:prose-invert">
 		<h1>Error: Cannot decrypt file 🔒</h1>
 		<p class="prose-xl">This note could not be decrypted with this link.</p>
 		<p class="prose-xl">

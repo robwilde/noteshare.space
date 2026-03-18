@@ -18,12 +18,11 @@
 	import FootnoteRef from '$lib/marked/renderers/FootnoteRef.svelte';
 	import Footnote from '$lib/marked/renderers/Footnote.svelte';
 
-	export let plaintext: string;
-	export let fileTitle: string | undefined;
+	let { plaintext, fileTitle }: { plaintext: string; fileTitle: string | undefined } = $props();
 
-	let ref: HTMLDivElement;
-	let footnotes: HTMLDivElement[];
-	let footnoteContainer: HTMLDivElement;
+	let ref = $state<HTMLDivElement>();
+	let footnotes = $state<HTMLDivElement[]>([]);
+	let footnoteContainer = $state<HTMLDivElement>();
 
 	// @ts-ignore: typing mismatch
 	marked.use({ extensions: extensions });
@@ -35,17 +34,16 @@
 		parseFootnotes();
 	}
 
-	$: if (fileTitle) {
-		document.title = fileTitle.trim();
-	}
+	$effect(() => {
+		if (fileTitle) {
+			document.title = fileTitle.trim();
+		}
+	});
 
-	/**
-	 * Searches for the first major header in the document to use as page title.
-	 */
 	function setTitle() {
 		const tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 		for (const tag of tags) {
-			const element: HTMLHeadingElement | null = ref.querySelector(tag);
+			const element: HTMLHeadingElement | null = ref?.querySelector(tag);
 			if (element && element.innerText.trim().length > 0) {
 				document.title = element.innerText.trim();
 				break;
@@ -53,18 +51,19 @@
 		}
 	}
 
-	/*
-	 * find all elements inside "ref" that have the data-footnote attribute
-	 */
 	function parseFootnotes() {
-		footnotes = Array.from(ref.querySelectorAll('[data-footnote]'));
+		if (ref) {
+			footnotes = Array.from(ref.querySelectorAll('[data-footnote]'));
+		}
 	}
 
-	$: if (footnotes?.length > 0 && footnoteContainer) {
-		footnotes.forEach((footnote) => {
-			footnoteContainer.appendChild(footnote);
-		});
-	}
+	$effect(() => {
+		if (footnotes?.length > 0 && footnoteContainer) {
+			footnotes.forEach((footnote) => {
+				footnoteContainer.appendChild(footnote);
+			});
+		}
+	});
 </script>
 
 <div
@@ -99,9 +98,8 @@ prose-blockquote:first:before:content-[''] prose-hr:transition-colors prose-code
 		{options}
 	/>
 
-	<!-- footnote container -->
 	{#if footnotes?.length > 0}
 		<hr />
-		<div bind:this={footnoteContainer} />
+		<div bind:this={footnoteContainer}></div>
 	{/if}
 </div>

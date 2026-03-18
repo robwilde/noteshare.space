@@ -7,11 +7,10 @@
 	import CopyIcon from 'svelte-icons/md/MdContentCopy.svelte';
 	import CheckIcon from 'svelte-icons/md/MdCheck.svelte';
 
-	export let lang: string;
-	export let text: string;
+	let { lang, text }: { lang: string; text: string } = $props();
 
-	let highlighted: string;
-	let copied = false;
+	let highlighted = $state('');
+	let copied = $state(false);
 	let resetTimeout: ReturnType<typeof setTimeout>;
 
 	onMount(() => {
@@ -43,7 +42,7 @@
 </script>
 
 <div class="code-block">
-	<button type="button" class="copy-btn" class:copied on:click={copyToClipboard} aria-label="Copy code">
+	<button type="button" class="copy-btn" class:copied onclick={copyToClipboard} aria-label="Copy code">
 		{#if copied}
 			<CheckIcon />
 		{:else}

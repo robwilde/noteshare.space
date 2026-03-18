@@ -1,28 +1,29 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import FaRegQuestionCircle from 'svelte-icons/fa/FaRegQuestionCircle.svelte';
 
-	export let text: string = '';
-	export let displayText: string = '';
-	export let useSlot = false;
+	let {
+		text = '',
+		displayText: propDisplayText = '',
+		useSlot = false,
+		children
+	}: { text?: string; displayText?: string; useSlot?: boolean; children?: Snippet } = $props();
 
-	if (!displayText) {
-		const aliasMatch = text.match(/^(?:.+)\|(.*)$/);
-		const headerMatch = text.match(/^(.[^|]+)\#(.[^|]*)$/);
-		if (aliasMatch) {
-			displayText = aliasMatch[1];
-		} else if (headerMatch) {
-			displayText = `${headerMatch[1]} > ${headerMatch[2]}`;
-		} else {
-			displayText = text;
-		}
-	}
+	let displayText = $derived.by(() => {
+		if (propDisplayText) return propDisplayText;
+		const aliasMatch = text.match(/^.+\|(.*)$/);
+		if (aliasMatch) return aliasMatch[1];
+		const headerMatch = text.match(/^(.[^|]+)(.[^|]*)$/);
+		if (headerMatch) return `${headerMatch[1]} > ${headerMatch[2]}`;
+		return text;
+	});
 </script>
 
 <dfn class="not-italic" title="Internal link">
 	<span class="underline cursor-not-allowed inline-flex items-center">
 		<span class="internal-link text-[#705dcf] opacity-50">
 			{#if useSlot}
-				<slot />
+				{@render children?.()}
 			{:else}
 				{displayText}
 			{/if}

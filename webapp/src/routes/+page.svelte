@@ -33,39 +33,45 @@
 	<div class="space-y-8 py-12 md:pt-24 md:pb-16">
 		<div class="flex flex-row gap-4 mx-auto justify-center">
 			<Tile>
-				<h2 slot="title">End-to-end encrypted</h2>
-				<p slot="text">
+				{#snippet title()}<h2>End-to-end encrypted</h2>{/snippet}
+				{#snippet text()}
+				<p>
 					Your notes are stored securely using strong <strong class="whitespace-nowrap"
 						>AES-256-CBC encryption</strong
 					>. The decryption key is never sent to the server, so not even the server can open your
 					notes.
 				</p>
+				{/snippet}
 			</Tile>
 			<img src="/encrypted.svg" alt="encrypted-art" class="w-80 hidden md:block" />
 		</div>
 
-		<div class="flex flex-row gap-4 mx-auto justify-center flex-row-reverse">
+		<div class="flex flex-row gap-4 mx-auto justify-center">
 			<Tile>
-				<h2 slot="title">Zero configuration</h2>
-				<p slot="text">
+				{#snippet title()}<h2>Zero configuration</h2>{/snippet}
+				{#snippet text()}
+				<p>
 					Other plugins require integration with GitHub Gist or Notion using your API keys.
 					Noteshare.space is a <strong class="whitespace-nowrap">dedicated service</strong> for sharing
 					your Markdown notes. No account is needed to use our service.
 				</p>
+				{/snippet}
 			</Tile>
 			<img src="/zeroconfig.svg" alt="encrypted-art" class="w-80 hidden md:block" />
 		</div>
 
 		<div class="flex flex-row gap-4 mx-auto justify-center">
 			<Tile>
-				<h2 slot="title">Open source</h2>
-				<p slot="text">
+				{#snippet title()}<h2>Open source</h2>{/snippet}
+				{#snippet text()}
+				<p>
 					Want to verify the security of the encryption mechanism? Or host your own instance?
 					Noteshare.space is completely <strong class="whitespace-nowrap"
 						><a class="underline" href="https://github.com/mcndt/Noteshare.space">open-source</a
 						></strong
 					> under the MIT license.
 				</p>
+				{/snippet}
 			</Tile>
 			<img src="/opensource.svg" alt="encrypted-art" class="w-80 hidden md:block" />
 		</div>

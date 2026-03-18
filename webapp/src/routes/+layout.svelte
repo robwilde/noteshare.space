@@ -1,5 +1,7 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { browser } from '$app/environment';
+	import { page } from '$app/state';
 
 	import Footer from '$lib/components/Footer.svelte';
 	import NavBar from '$lib/components/navbar/NavBar.svelte';
@@ -8,24 +10,23 @@
 	import LogoGithub from 'svelte-icons/io/IoLogoGithub.svelte';
 	import '../app.css';
 
-	let dark: boolean;
+	let { children }: { children: Snippet } = $props();
+
+	let initialized = $state(false);
+	let dark = $state(false);
 	let darkTheme = 'dark';
 
-	$: getTheme();
-
-	$: {
-		if (browser) {
-			window.localStorage.setItem('isDarkMode', String(dark));
-		}
+	if (browser) {
+		const savedMode = window.localStorage.getItem('isDarkMode');
+		dark = savedMode === 'true';
+		initialized = true;
 	}
 
-	async function getTheme() {
-		if (browser) {
-			const savedMode = window.localStorage.getItem('isDarkMode');
-			dark = savedMode ? savedMode === 'true' : false;
+	$effect(() => {
+		if (browser && initialized) {
 			window.localStorage.setItem('isDarkMode', String(dark));
 		}
-	}
+	});
 </script>
 
 <svelte:head>
@@ -67,17 +68,17 @@
 	<meta property="twitter:image" content="https://noteshare.space/meta.png" />
 </svelte:head>
 
-<div class=" h-full {dark !== undefined ? '' : 'hidden'} {dark ? darkTheme : ''}">
+<div class=" h-full {initialized ? '' : 'hidden'} {dark ? darkTheme : ''}">
 	<div class="bg-white dark:bg-background-dark min-h-full transition-colors">
 		<div class="z-50 sticky top-0 w-full bg-white dark:bg-background-dark transition-colors">
 			<div class="top-0 left-0 right-0">
 				<NavBar>
-					<svelte:fragment slot="left">
+					{#snippet left()}
 						<NavBarLink href="/about">About</NavBarLink>
 						<NavBarLink href="/install">Get plugin</NavBarLink>
 						<NavBarLink href="/contact">Contact</NavBarLink>
-					</svelte:fragment>
-					<svelte:fragment slot="right">
+					{/snippet}
+					{#snippet right()}
 						<NavBarLink href="https://obsidian.md"
 							><span class="text-[#705dcf] font-bold">Get Obsidian</span></NavBarLink
 						>
@@ -92,14 +93,13 @@
 							</span>
 						</NavBarLink>
 						<ThemeToggle bind:dark />
-					</svelte:fragment>
-					></NavBar
-				>
+					{/snippet}
+				</NavBar>
 			</div>
 		</div>
 
-		<div class="container mx-auto max-w-4xl mx-auto mt-6 md:mt-12 px-4 2xl:px-0 ">
-			<slot />
+		<div class="container mx-auto {page.url.pathname.startsWith('/note/') ? '' : 'max-w-4xl'} mt-6 md:mt-12 px-4 2xl:px-0">
+			{@render children()}
 			<div class="mt-12">
 				<Footer />
 			</div>
