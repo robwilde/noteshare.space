@@ -3,7 +3,6 @@
 	import SummaryIcon from 'svelte-icons/md/MdFormatListBulleted.svelte';
 	import InfoIcon from 'svelte-icons/md/MdInfoOutline.svelte';
 	import TodoIcon from 'svelte-icons/md/MdPlaylistAddCheck.svelte';
-	// import HintIcon from 'svelte-icons/md/MdLightbulbOutline.svelte';
 	import HintIcon from 'svelte-icons/md/MdWhatshot.svelte';
 	import CheckIcon from 'svelte-icons/md/MdCheck.svelte';
 	import QuestionIcon from 'svelte-icons/md/MdHelpOutline.svelte';
@@ -12,34 +11,35 @@
 	import ErrorIcon from 'svelte-icons/md/MdErrorOutline.svelte';
 	import BugIcon from 'svelte-icons/md/MdBugReport.svelte';
 	import QuoteIcon from 'svelte-icons/md/MdFormatQuote.svelte';
-	export let icon: string;
+
+	let { icon }: { icon: string } = $props();
 </script>
 
-{#if icon == 'note'}
+{#if icon === 'note'}
 	<NoteIcon />
-{:else if icon == 'summary'}
+{:else if icon === 'summary'}
 	<SummaryIcon />
-{:else if icon == 'info'}
+{:else if icon === 'info'}
 	<InfoIcon />
-{:else if icon == 'todo'}
+{:else if icon === 'todo'}
 	<TodoIcon />
-{:else if icon == 'hint'}
+{:else if icon === 'hint'}
 	<HintIcon />
-{:else if icon == 'success'}
+{:else if icon === 'success'}
 	<CheckIcon />
-{:else if icon == 'question'}
+{:else if icon === 'question'}
 	<QuestionIcon />
-{:else if icon == 'warning'}
+{:else if icon === 'warning'}
 	<WarningIcon />
-{:else if icon == 'fail'}
+{:else if icon === 'fail'}
 	<FailIcon />
-{:else if icon == 'error'}
+{:else if icon === 'error'}
 	<ErrorIcon />
-{:else if icon == 'bug'}
+{:else if icon === 'bug'}
 	<BugIcon />
-{:else if icon == 'example'}
+{:else if icon === 'example'}
 	<SummaryIcon />
-{:else if icon == 'quote'}
+{:else if icon === 'quote'}
 	<QuoteIcon />
 {:else}
 	<NoteIcon />
