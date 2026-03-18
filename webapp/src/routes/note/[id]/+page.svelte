@@ -9,14 +9,13 @@
 	import Dismissable from '$lib/components/Dismissable.svelte';
 	import type { PageData } from './$types';
 
-	export let data: PageData;
-	let { note } = data;
+	let { data }: { data: PageData } = $props();
+	let note = $derived(data.note);
 
-	let plaintext: string;
-	let timeString: string;
-	let decryptFailed = false;
-	let showRaw = false;
-	let fileTitle: string | undefined;
+	let plaintext = $state<string | undefined>(undefined);
+	let decryptFailed = $state(false);
+	let showRaw = $state(false);
+	let fileTitle = $state<string | undefined>(undefined);
 
 	function toggleRaw() {
 		showRaw = !showRaw;
@@ -62,10 +61,11 @@
 		}
 	});
 
-	if (note?.insert_time) {
-		const diff_ms = new Date().valueOf() - new Date(note.insert_time).valueOf();
-		timeString = msToString(diff_ms);
-	}
+	let timeString = $derived(
+		note?.insert_time
+			? msToString(new Date().valueOf() - new Date(note.insert_time).valueOf())
+			: ''
+	);
 </script>
 
 <svelte:head>
@@ -87,7 +87,7 @@
 				<span>e2e encrypted | <span>Shared {timeString} ago</span></span>
 			</span>
 			<button
-				on:click={toggleRaw}
+				onclick={toggleRaw}
 				class="flex flex-row-reverse justify-end md:flex-row underline md:no-underline gap-1.5 uppercase items-center hover:underline"
 			>
 				{#if showRaw}
