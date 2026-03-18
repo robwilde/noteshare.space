@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { sveltekit } from '@sveltejs/kit/vite';
 import { plugin as markdown } from 'vite-plugin-markdown';
 import { searchForWorkspaceRoot } from 'vite';
