@@ -76,7 +76,7 @@
 </svelte:head>
 
 {#if plaintext}
-	<div class="max-w-[50rem] mx-auto">
+	<div class="mx-auto">
 		<Dismissable />
 
 		<p
@@ -108,7 +108,7 @@
 {/if}
 
 {#if decryptFailed}
-	<div class="prose max-w-[50rem] prose-zinc dark:prose-invert">
+	<div class="prose prose-zinc dark:prose-invert">
 		<h1>Error: Cannot decrypt file 🔒</h1>
 		<p class="prose-xl">This note could not be decrypted with this link.</p>
 		<p class="prose-xl">

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { page } from '$app/stores';
 
 	import Footer from '$lib/components/Footer.svelte';
 	import NavBar from '$lib/components/navbar/NavBar.svelte';
@@ -98,7 +99,7 @@
 			</div>
 		</div>
 
-		<div class="container mx-auto max-w-4xl mx-auto mt-6 md:mt-12 px-4 2xl:px-0 ">
+		<div class="container mx-auto {$page.url.pathname.startsWith('/note/') ? '' : 'max-w-4xl'} mt-6 md:mt-12 px-4 2xl:px-0">
 			<slot />
 			<div class="mt-12">
 				<Footer />
